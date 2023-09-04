@@ -3,7 +3,7 @@ import { watch, edit } from "../controllers/videoControllers";
 
 const videoRouter = express.Router();
 
-videoRouter.get("/watch", watch);
-videoRouter.get("/edit", edit);
+videoRouter.get("/:id(\\d+)", watch);
+videoRouter.get("/:id(\\d+)/edit", edit);
 
 export default videoRouter;
