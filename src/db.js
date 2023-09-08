@@ -1,9 +1,6 @@
 import mongoose from "mongoose";
 
-mongoose.connect("mongodb://127.0.0.1:27017/wetube-re", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect("mongodb://127.0.0.1:27017/wetube-re", {});
 
 const db = mongoose.connection;
 
