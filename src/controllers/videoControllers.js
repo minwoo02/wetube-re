@@ -2,7 +2,7 @@ import Video from "../models/Video.js";
 
 export const home = async (req, res) => {
   try {
-    const videos = await Video.find({}); //db에 Video 파일들을 불러옴
+    const videos = await Video.find({}).sort({ createdAt: "desc" }); //db에 Video 파일들을 불러옴
     return res.render("home", { pageTitle: "Home", videos });
   } catch (error) {
     return res.render("server-error"), { error };
@@ -65,4 +65,26 @@ export const postUpload = async (req, res) => {
     });
   }
   // videoSchema에 있는 내용을 create할 때 작성하지 않으면 error 발생
+};
+
+export const deleteVideo = async (req, res) => {
+  const { id } = req.params;
+  await Video.findByIdAndDelete(id);
+
+  //delete video
+  return res.redirect("/");
+};
+
+export const search = async (req, res) => {
+  const { keyword } = req.query;
+  let videos = [];
+  if (keyword) {
+    videos = await Video.find({
+      title: {
+        $regex: new RegExp(`${keyword}$`, "i"),
+        // MongoDB에 훌륭한 필터 엔진 덕분
+      },
+    });
+  }
+  return res.render("search", { pageTitle: "Search", videos });
 };
