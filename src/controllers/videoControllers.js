@@ -69,6 +69,7 @@ export const postUpload = async (req, res) => {
   // videoSchema에 있는 내용을 create할 때 작성하지 않으면 error 발생
 };
 
+/*-----------------------video delete-----------------------*/
 export const deleteVideo = async (req, res) => {
   const { id } = req.params;
   await Video.findByIdAndDelete(id);
@@ -77,6 +78,7 @@ export const deleteVideo = async (req, res) => {
   return res.redirect("/");
 };
 
+/*-----------------------video search-----------------------*/
 export const search = async (req, res) => {
   const { keyword } = req.query;
   let videos = [];
