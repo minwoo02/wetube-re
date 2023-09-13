@@ -4,10 +4,16 @@ header
         ul 
             li
                 a(href="/") Home
-            li
-                a(href="/join") Join
-            li
-                a(href="/login") Login
+            if loggedIn 
+                li
+                    a(href="/logout") Log out
+                li 
+                    a(href="/my-profile") #{loggedInUser.name}의 profile
+            else 
+                li
+                    a(href="/join") Join
+                li
+                    a(href="/login") Login
             li
                 a(href="/search") Search
             li 
