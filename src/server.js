@@ -19,11 +19,11 @@ app.use(express.urlencoded({ extended: true })); //express application이 form�
 
 app.use(
   session({
-    secret: "Hello!",
-    resave: true,
-    saveUninitialized: true,
+    secret: process.env.COOKIE_SECRET, //세션 쿠키에 사용되는 비밀번호이다. 이 값은 서버 측에서 쿠키를 검증하는 데 사용된다.
+    resave: false,
+    saveUninitialized: false, //false => 세션이 수정, 초기화될 때만, 세션을 DB에 저장, 쿠키를 넘겨줌
     store: MongoStore.create({
-      mongoUrl: "mongodb://127.0.0.1:27017/wetube-re",
+      mongoUrl: process.env.DB_URL,
     }),
   })
 );

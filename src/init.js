@@ -1,5 +1,6 @@
 //- 필요한 모든것들을 import
 
+import "dotenv/config";
 import "./db.js"; //db.js 파일 자체를 import
 import "./models/Video.js";
 import "./models/User.js";
