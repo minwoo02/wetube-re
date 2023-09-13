@@ -30,6 +30,12 @@ app.use((req, res, next) => {
   });
 });
 
+app.get("/add-one", (req, res, next) => {
+  req.session.potato += 1;
+  return res.send(`${req.session.id} ${req.session.potato}`);
+});
+//세션은 서버가 만들어서 제공해주다보니 서버가 재부팅되면 초기화 된다. (그래서 DB에 저장해서 관리를 한다는 소리. 실 운영에선 서버가 꺼지는 일은 없으니깐.) 세션의 값은 서버가 만들어주는 고유값이다보니 해당 값을 기준으로 클라이언트에서 요청한 건에 대해 유저를 특정지을 수 있다
+
 app.use("/", rootRouter);
 app.use("/videos", videoRouter);
 app.use("/users", userRouter);
