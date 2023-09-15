@@ -130,7 +130,7 @@ export const finishGithubLogin = async (req, res) => {
         avatarUrl: userData.avatar_url,
         name: userData.name,
         username: userData.login,
-        email: emailObj.email,
+        email: `${emailObj.email} (github)`,
         password: "",
         socialOnly: true,
         location: userData.location,
@@ -209,7 +209,7 @@ export const finishKakaoLogin = async (req, res) => {
     let user = await User.findOne({ email: userEmail });
     if (!user) {
       user = await User.create({
-        email: userEmail,
+        email: `${userEmail} (kakao)`,
         avatarUrl: userData.kakao_account.profile.profile_image_url,
         username,
         name: username,
@@ -287,4 +287,38 @@ export const postEdit = async (req, res) => {
   );
   req.session.user = updatedUser; //session이 db와 연결돼 있지 않으므로 session 업데이트
   return res.redirect("/users/edit");
+};
+
+/*-----------------------change password----------------------*/
+export const getChangePassword = (req, res) => {
+  if (req.session.user.socialOnly === true) {
+    return res.redirect("/");
+  }
+  return res.render("users/change-password", { pageTitle: "Change Password" });
+};
+export const postChangePassword = async (req, res) => {
+  const {
+    session: {
+      user: { _id },
+    },
+    body: { oldPassword, newPassword, newPasswordConfirmation },
+  } = req;
+  const user = await User.findById(_id);
+  const ok = await bcrypt.compare(oldPassword, user.password);
+  if (!ok) {
+    return res.status(400).render("users/change-password", {
+      pageTitle: "Change Password",
+      errorMessage: "The current password is incorrect",
+    });
+  }
+  if (newPassword !== newPasswordConfirmation) {
+    return res.status(400).render("users/change-password", {
+      pageTitle: "Change Password",
+      errorMessage: "The password does not match the confirmation",
+    });
+  }
+  user.password = newPassword;
+  await user.save();
+  //send notification
+  return res.redirect("/users/logout");
 };
