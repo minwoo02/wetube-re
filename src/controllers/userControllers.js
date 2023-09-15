@@ -61,7 +61,7 @@ export const postLogin = async (req, res) => {
     });
   }
   req.session.loggedIn = true;
-  req.session.user = user;
+  req.session.user = user; //로그인할때 req.session.user에 입력해준다.
   return res.redirect("/");
 };
 
@@ -243,6 +243,48 @@ export const logout = (req, res) => {
 export const getEdit = (req, res) => {
   return res.render("edit-profile", { pageTitle: "Edit Profile" });
 };
-export const postEdit = (req, res) => {
-  return res.render("edit-profile");
+export const postEdit = async (req, res) => {
+  const {
+    session: {
+      user: { _id },
+    },
+    body: { name, email, username, location },
+  } = req;
+  //code challenge
+  const sessionUser = req.session.user;
+
+  if (sessionUser.email !== email && (await User.exists({ email }))) {
+    return res.status(400).render("edit-profile", {
+      pageTitle: "Edit Profile",
+      errorMessage: "This email is already taken.",
+    });
+  }
+
+  if (sessionUser.username !== username && (await User.exists({ username }))) {
+    return res.status(400).render("edit-profile", {
+      pageTitle: "Edit Profile",
+      errorMessage: "This username is already taken.",
+    });
+  }
+  //code Challenge/
+  const updatedUser = await User.findByIdAndUpdate(
+    //User model을 업데이트
+    _id,
+    {
+      name,
+      email,
+      username,
+      location,
+    },
+    { new: true } //최근 업데이트된 object를 원함. 이전 데이터 말고,
+    // req.session.user = {
+    //   ...req.session.user,
+    //   name,
+    //   email,
+    //   username,
+    //   location
+    // }
+  );
+  req.session.user = updatedUser; //session이 db와 연결돼 있지 않으므로 session 업데이트
+  return res.redirect("/users/edit");
 };
