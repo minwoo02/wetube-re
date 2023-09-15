@@ -3,10 +3,12 @@ header
     nav 
         ul 
             li
-                a(href="/") Home #{loggedInUser.name}의 profile
+                a(href="/") Home
             if loggedIn             
                 li 
                     a(href="/videos/upload") Upload Video
+                li
+                    a(href=`/users/${loggedInUser._id}`) My Profile
                 li
                     a(href="/users/edit") Edit Profile
                 li 
