@@ -1,5 +1,4 @@
 import User from "../models/User";
-import Video from "../models/Video";
 import fetch from "node-fetch";
 import bcrypt from "bcrypt";
 
@@ -136,13 +135,6 @@ export const finishGithubLogin = async (req, res) => {
         socialOnly: true,
         location: userData.location,
       });
-    } else {
-      // 소셜로그인끼리 중복된 이메일을 찾았을 때 에러 처리
-      return res.status(400).render("login", {
-        pageTitle: "Login",
-        errorMessage:
-          "This social email is already taken. Please select another social login method.",
-      });
     }
     req.session.loggedIn = true;
     req.session.user = user;
@@ -216,13 +208,6 @@ export const finishKakaoLogin = async (req, res) => {
         name: username,
         password: "",
         socialOnly: true,
-      });
-    } else {
-      // 소셜로그인끼리 중복된 이메일을 찾았을 때 에러 처리
-      return res.status(400).render("login", {
-        pageTitle: "Login",
-        errorMessage:
-          "This social email is already taken. Please select another social login method.",
       });
     }
     req.session.loggedIn = true;
@@ -330,7 +315,13 @@ export const postChangePassword = async (req, res) => {
 /*-----------------------see profile----------------------*/
 export const see = async (req, res) => {
   const { id } = req.params;
-  const user = await User.findById(id).populate("videos");
+  const user = await User.findById(id).populate({
+    path: "videos",
+    populate: {
+      path: "owner",
+      model: "User",
+    },
+  });
   if (!user) {
     return res.status(404).render("404", { pageTitle: "User not found." });
   }

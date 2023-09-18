@@ -3,7 +3,9 @@ import User from "../models/User";
 
 export const home = async (req, res) => {
   try {
-    const videos = await Video.find({}).sort({ createdAt: "desc" }); //db에 Video 파일들을 불러옴
+    const videos = await Video.find({})
+      .sort({ createdAt: "desc" })
+      .populate("owner"); //db에 Video 파일들을 불러옴
     return res.render("home", { pageTitle: "Home", videos });
   } catch (error) {
     return res.render("server-error"), { error };
@@ -120,7 +122,7 @@ export const search = async (req, res) => {
         $regex: new RegExp(`${keyword}$`, "i"),
         // MongoDB에 훌륭한 필터 엔진 덕분
       },
-    });
+    }).populate("owner");
   }
   return res.render("search", { pageTitle: "Search", videos });
 };

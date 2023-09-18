@@ -2,7 +2,8 @@ extends ../base
 include ../mixins/video
 
 block content
-    each video in user.videos
-        +video(video)
-    else
-        li Sorry nothing found.
+    div.profile__data
+        if loggedInUser.avatarUrl.includes("github") || loggedInUser.avatarUrl.includes("kakao")
+            img.header__avatar(src=loggedInUser.avatarUrl)
+        else
+            img.header__avatar(src="/" + loggedInUser.avatarUrl)
