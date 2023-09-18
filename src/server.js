@@ -29,7 +29,8 @@ app.use(
 );
 
 app.use(localsMiddleware);
-app.use("/uploads", express.static("uploads")); //uploads 폴더 노출
+app.use("/uploads", express.static("uploads")); //uploads 폴더를 주소에 노출
+app.use("/static", express.static("assets")); //webpack에서 처리된 파일을 주소에 노출
 app.use("/", rootRouter);
 app.use("/videos", videoRouter);
 app.use("/users", userRouter);
