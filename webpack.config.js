@@ -18,6 +18,10 @@ module.exports = {
           },
         },
       },
+      {
+        test: /\.scss$/, //모든 scss들을 긁어온다.
+        use: ["style-loader", "css-loader", "sass-loader"],
+      },
     ],
   },
 };
