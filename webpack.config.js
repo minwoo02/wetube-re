@@ -3,7 +3,10 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
 
 module.exports = {
-  entry: "./src/client/js/main.js",
+  entry: {
+    main: "./src/client/js/main.js",
+    videoPlayer: "./src/client/js/videoPlayer.js",
+  },
   mode: "development",
   watch: true, //계속 지켜보기
   plugins: [
@@ -12,7 +15,7 @@ module.exports = {
     }),
   ],
   output: {
-    filename: "js/main.js",
+    filename: "js/[name].js", //[name]은 entry에 있는 이름을 가져온다.
     path: path.resolve(__dirname, "assets"),
     clean: true, //webpack이 재시작될 때 기존 assets 파일들 싹 clean하고 다시 만들어주기
   },
