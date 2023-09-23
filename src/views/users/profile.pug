@@ -4,6 +4,6 @@ include ../mixins/video
 block content
     div.profile__data
         if loggedInUser.avatarUrl.includes("github") || loggedInUser.avatarUrl.includes("kakao")
-            img.header__avatar(src=loggedInUser.avatarUrl)
+            img.header__avatar(src=loggedInUser.avatarUrl, crossorigin)
         else
-            img.header__avatar(src="/" + loggedInUser.avatarUrl)
+            img.header__avatar(src="/" + loggedInUser.avatarUrl, crossorigin)

@@ -30,6 +30,11 @@ app.use(
 );
 
 app.use(localsMiddleware);
+app.use((req, res, next) => {
+  res.header("Cross-Origin-Embedder-Policy", "require-corp");
+  res.header("Cross-Origin-Opener-Policy", "same-origin");
+  next();
+});
 app.use("/uploads", express.static("uploads")); //uploads 폴더를 주소에 노출
 app.use("/static", express.static("assets")); //webpack에서 처리된 파일을 주소에 노출
 app.use("/", rootRouter);
